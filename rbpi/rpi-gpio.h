@@ -36,67 +36,48 @@
 /** The base address of the GPIO peripheral (ARM Physical Address) */
 #define RPI_GPIO_BASE       ( PERIPHERAL_BASE + 0x200000UL )
 
+/* 
+    GPFSEL0: C2-R
+    GPFSEL1: C1-R   C1-A    C2-V    SW
+    GPFSEL2: C1-V   C2-A
+
+*/
+#define LED_GPFSEL0         GPFSEL0
+#define LED_GPFSEL1         GPFSEL1
+#define LED_GPFSEL2         GPFSEL2
 #define LED_GPSET           GPSET0
 #define LED_GPCLR           GPCLR0
 
-/*
-
-    FALTA:
-        |  | DEFINIR UNA FUNCION QUE DADOS UN GPFSELn (n=0,1,2)
-        Y UN LED_GPFBIT_x INIC
-
-*/
-
 /* semaforo 1 */
 /* C1-R */
-#define LED_GPFSEL1R      GPFSEL1
-#define LED_GPFBIT1R      3
-#define LED_GPIO_BIT1R    11
-#define LED_ON1R()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT1R ); } while( 0 )
-#define LED_OFF1R()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT1R ); } while( 0 )
+#define LED_GPFBIT_C1R      3
+#define LED_GPIO_BIT_C1R    11
 
 /* C1-A */
-#define LED_GPFSEL1A      GPFSEL1
-#define LED_GPFBIT1A      0
-#define LED_GPIO_BIT1A    10
-#define LED_ON1A()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT1A ); } while( 0 )
-#define LED_OFF1A()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT1A ); } while( 0 )
+#define LED_GPFBIT_C1A      0
+#define LED_GPIO_BIT_C1A    10
 
 /* C1-V */
-#define LED_GPFSEL1V      GPFSEL1
-#define LED_GPFBIT1V      21
-#define LED_GPIO_BIT1V    17
-#define LED_ON1V()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT1V ); } while( 0 )
-#define LED_OFF1V()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT1V ); } while( 0 )
+#define LED_GPFBIT_C1V      21
+#define LED_GPIO_BIT_C1V    17
 
 /* semaforo 2 */
 /* C2-R */
-#define LED_GPFSEL2R      GPFSEL0
-#define LED_GPFBIT2R      21
-#define LED_GPIO_BIT2R    7
-#define LED_ON2R()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT2R ); } while( 0 )
-#define LED_OFF2R()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT2R ); } while( 0 )
+#define LED_GPFBIT_C2R      21
+#define LED_GPIO_BIT_C2R    7
 
 /* C2-A */
-#define LED_GPFSEL2A      GPFSEL2
-#define LED_GPFBIT2A      12
-#define LED_GPIO_BIT2A    24
-#define LED_ON2A()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT2A ); } while( 0 )
-#define LED_OFF2A()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT2A ); } while( 0 )
+#define LED_GPFBIT_C2A      12
+#define LED_GPIO_BIT_C2A    24
 
 /* C2-V */
-#define LED_GPFSEL2V      GPFSEL1
-#define LED_GPFBIT2V      24
-#define LED_GPIO_BIT2V    18
-#define LED_ON2V()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT2V ); } while( 0 )
-#define LED_OFF2V()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT2V ); } while( 0 )
+#define LED_GPFBIT_C2V      24
+#define LED_GPIO_BIT_C2V    18
 
 /* switch */
-#define SW_GPFSEL     GPFSEL1
-#define SW_GPFBIT          12
-#define SW_GPIO_BITS       14
+#define LED_GPFBIT_SW      12
+#define LED_GPIO_BIT_SW    14
 
-/***/
 /** The GPIO Peripheral is described in section 6 of the BCM2835 Peripherals
     documentation.
 
@@ -109,7 +90,7 @@
 
     The GPIO peripheral has three dedicated interrupt lines. These lines are
     triggered by the setting of bits in the event detect status register. Each
-    bank has its’ own interrupt line with the third line shared between all
+    bank has itsâ€™ own interrupt line with the third line shared between all
     bits.
 
     The Alternate function table also has the pull state (pull-up/pull-down)

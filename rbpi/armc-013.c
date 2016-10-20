@@ -70,12 +70,12 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 
     /* establecer las salidas */
     /* todos son outputs menos el swtich */
-    RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C1R);    
-    RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C1A);
-    RPI_GetGpio()->LED_GPFSEL2 |= (1 << LED_GPFBIT_C1V);
-    RPI_GetGpio()->LED_GPFSEL0 |= (1 << LED_GPFBIT_C2R);
-    RPI_GetGpio()->LED_GPFSEL2 |= (1 << LED_GPFBIT_C2A);
-    RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C2V);
+    set_output(LED_GPFSEL1, LED_GPFBIT_C1R);
+    set_output(LED_GPFSEL1, LED_GPFBIT_C1A);
+    set_output(LED_GPFSEL2, LED_GPFBIT_C1V);
+    set_output(LED_GPFSEL0, LED_GPFBIT_C2R);
+    set_output(LED_GPFSEL2, LED_GPFBIT_C2A);
+    set_output(LED_GPFSEL1, LED_GPFBIT_C2V);
 
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
