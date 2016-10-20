@@ -36,23 +36,89 @@
 /** The base address of the GPIO peripheral (ARM Physical Address) */
 #define RPI_GPIO_BASE       ( PERIPHERAL_BASE + 0x200000UL )
 
-#if defined( RPIBPLUS ) || defined( RPI2 )
-    #define LED_GPFSEL      GPFSEL4
-    #define LED_GPFBIT      21
-    #define LED_GPSET       GPSET1
-    #define LED_GPCLR       GPCLR1
-    #define LED_GPIO_BIT    15
-    #define LED_ON()        do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
-    #define LED_OFF()       do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
-#else
-    #define LED_GPFSEL      GPFSEL1
-    #define LED_GPFBIT      18
-    #define LED_GPSET       GPSET0
-    #define LED_GPCLR       GPCLR0
-    #define LED_GPIO_BIT    16
-    #define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
-    #define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
-#endif
+// #if defined( RPIBPLUS ) || defined( RPI2 )
+//     #define LED_GPFSEL      GPFSEL4
+//     #define LED_GPFBIT      21
+//     #define LED_GPSET       GPSET1
+//     #define LED_GPCLR       GPCLR1
+//     #define LED_GPIO_BIT    15
+//     #define LED_ON()        do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+//     #define LED_OFF()       do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+// #else
+//     #define LED_GPFSEL      GPFSEL1
+//     #define LED_GPFBIT      18
+//     #define LED_GPSET       GPSET0
+//     #define LED_GPCLR       GPCLR0
+//     #define LED_GPIO_BIT    16
+//     #define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+//     #define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+// #endif
+
+/* semaforo 1 */
+/* C1-R */
+#define LED_GPFSEL      GPFSEL1
+#define LED_GPFBIT      3
+#define LED_GPSET       GPSET0
+#define LED_GPCLR       GPCLR0
+#define LED_GPIO_BIT    11
+#define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+
+/* C1-A */
+#define LED_GPFSEL      GPFSEL1
+#define LED_GPFBIT      0
+#define LED_GPSET       GPSET0
+#define LED_GPCLR       GPCLR0
+#define LED_GPIO_BIT    10
+#define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+
+/* C1-V */
+#define LED_GPFSEL      GPFSEL2
+#define LED_GPFBIT      21
+#define LED_GPSET       GPSET0
+#define LED_GPCLR       GPCLR0
+#define LED_GPIO_BIT    17
+#define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+
+/* semaforo 2 */
+/* C1-R */
+#define LED_GPFSEL      GPFSEL0
+#define LED_GPFBIT      21
+#define LED_GPSET       GPSET0
+#define LED_GPCLR       GPCLR0
+#define LED_GPIO_BIT    7
+#define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+
+/* C1-A */
+#define LED_GPFSEL      GPFSEL2
+#define LED_GPFBIT      12
+#define LED_GPSET       GPSET0
+#define LED_GPCLR       GPCLR0
+#define LED_GPIO_BIT    24
+#define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+
+/* C1-V */
+#define LED_GPFSEL      GPFSEL1
+#define LED_GPFBIT      24
+#define LED_GPSET       GPSET0
+#define LED_GPCLR       GPCLR0
+#define LED_GPIO_BIT    18
+#define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+
+/* switch */
+#define LED_GPFSEL      GPFSEL1
+#define LED_GPFBIT      12
+#define LED_GPSET       GPSET0
+#define LED_GPCLR       GPCLR0
+#define LED_GPIO_BIT    14
+#define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+
 
 /***/
 #define RPI_GPIO_FSEL0_00_INPUT     ( 0 )

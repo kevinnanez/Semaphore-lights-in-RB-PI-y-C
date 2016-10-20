@@ -46,7 +46,14 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 {
     /* Write 1 to the LED init nibble in the Function Select GPIO
        peripheral register to enable LED pin as an output */
-    RPI_GetGpio()->LED_GPFSEL |= LED_GPFBIT;
+
+    /* inicializar todo en cero */
+    RPI_GetGpio()->LED_GPFSEL0 = 0;
+    RPI_GetGpio()->LED_GPFSEL1 = 0;
+    RPI_GetGpio()->LED_GPFSEL2 = 0;
+
+    /* establecer las salidas */
+    RPI_GetGpio()->LED_GPFSEL |= (1<<LED_GPFBIT);
 
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
