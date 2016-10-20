@@ -70,8 +70,8 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 
     /* establecer las salidas */
     /* todos son outputs menos el swtich */
-    RPI_GetGpio()->LED_GPFSEL0 |= (1 << LED_GPFBIT_C2R);
-
+    RPI_GetGpio()->LED_GPFSEL0 |= (1 << LED_GPFBIT_C2R); //Por q no usamos la funcion  set_output( LED_GPFSEL0, LED_GPFBIT_C2R )?
+															//Es la funcion q esta declarada al principio l45
     RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C1R);
     RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C1A);
     RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C2V);
@@ -82,8 +82,8 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
 
-    /* 
 
+    /* 
         Despues de esto debemos apuntar a un modo (1 de los 3),
         iterar en las secuencias.
         Por cada secuencia, hacemos una mascara de los bits para saber
@@ -94,6 +94,28 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
         Verificamos el estado del switch (si esta encendido, apuntamos al siguiente modo)
 
     */
+
+//Duda1: Es necesario hacer un loop grande para q pase por los tres modos?
+//Duda2: Por que "seteamos el tiempo con RPI_GetArmTimer()->Load y llamamos a las funciones para prender y apagar los correspondientes leds"?
+//Duda3: Que parte de la RPI selecciona el modo?
+//Duda4: Definir secAct, i, N y modos
+//Duda5: Por cuanto tiempo esta el modo de emergencia activo?
+
+	RPI_algo()->Modo = modo_0; 			//Esto tiene q ser al azar entre 0 y 2
+	
+	while(i<N){ 						//Donde N es la cantidad de secuencias de un modo 
+		aux = 11111111 && secAct[i]; 	//secAct es la secuencia q se esta ejecutando en este momento
+		if(aux == 00001001 || aux == 00001010 || aux == 00010001 || aux == 00000000){		//La secuencia es permitida?
+			RPI_algo()->Modo = modo_3; 	//modo_3  = modo de emergencia
+			i = N;					//Salgo del loop
+		}else
+			i++;						//Avanzo la secuencia
+	}
+
+	led_on( LED_GPIO_BIT_SW );		//Pulso el switch
+	RPI_algo->Modo = modo_1			//Paso al siguiente modo, no necesariamente modo_1
+	led_off( LED_GPIO_BIT_SW );		//Suelto de switch
+
 
     /* Setup the system timer interrupt */
     /* Timer frequency = Clk/256 * 0x400 */
