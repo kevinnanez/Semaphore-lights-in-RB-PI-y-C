@@ -54,6 +54,8 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 
     /* establecer las salidas */
     RPI_GetGpio()->LED_GPFSEL |= (1<<LED_GPFBIT);
+//     RPI_GetGpio()->LED_GPFSEL = 0;
+// RPI_GetGpio()->LED_GPFSEL |= 1<<LED_GPFBIT;
 
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
