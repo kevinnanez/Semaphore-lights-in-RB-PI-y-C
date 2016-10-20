@@ -36,24 +36,6 @@
 /** The base address of the GPIO peripheral (ARM Physical Address) */
 #define RPI_GPIO_BASE       ( PERIPHERAL_BASE + 0x200000UL )
 
-// #if defined( RPIBPLUS ) || defined( RPI2 ) //SI EL RASPBERRY ES EL PLUS Ó EL 2
-//     #define LED_GPFSEL      GPFSEL4
-//     #define LED_GPFBIT      21
-//     #define LED_GPSET       GPSET1
-//     #define LED_GPCLR       GPCLR1
-//     #define LED_GPIO_BIT    15
-//     #define LED_ON()        do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
-//     #define LED_OFF()       do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
-// #else //SI ES EL RASPBERRY 1
-//     #define LED_GPFSEL      GPFSEL1
-//     #define LED_GPFBIT      18
-//     #define LED_GPSET       GPSET0
-//     #define LED_GPCLR       GPCLR0
-//     #define LED_GPIO_BIT    16
-//     #define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
-//     #define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
-// #endif
-
 /*
 
     FALTA:
@@ -61,8 +43,6 @@
         Y UN LED_GPFBIT_x INIC
 
 */
-#define LED_GPSET           GPSET0
-#define LED_GPCLR           GPCLR0
 
 /* semaforo 1 */
 /* C1-R */
@@ -101,40 +81,11 @@
 #define LED_GPFBIT_SW      12
 #define LED_GPIO_BIT_SW    14
 
-
 /***/
-#define RPI_GPIO_FSEL0_00_INPUT     ( 0 )
-#define RPI_GPIO_FSEL0_00_OUTPUT    ( 1 )
-
-#define RPI_GPIO_FSEL0_01_INPUT     ( 0 << 3 )
-#define RPI_GPIO_FSEL0_01_OUTPUT    ( 1 << 3 )
-
-#define RPI_GPIO_FSEL0_02_INPUT     ( 0 << 6 )
-#define RPI_GPIO_FSEL0_02_OUTPUT    ( 1 << 6 )
-
-#define RPI_GPIO_FSEL0_03_INPUT     ( 0 << 9 )
-#define RPI_GPIO_FSEL0_03_OUTPUT    ( 1 << 9 )
-
-#define RPI_GPIO_FSEL0_04_INPUT     ( 0 << 12 )
-#define RPI_GPIO_FSEL0_04_OUTPUT    ( 1 << 12 )
-
-#define RPI_GPIO_FSEL0_05_INPUT     ( 0 << 15 )
-#define RPI_GPIO_FSEL0_05_OUTPUT    ( 1 << 15 )
-
-#define RPI_GPIO_FSEL0_06_INPUT     ( 0 << 18 )
-#define RPI_GPIO_FSEL0_06_OUTPUT    ( 1 << 18 )
-
-#define RPI_GPIO_FSEL0_07_INPUT     ( 0 << 21 )
-#define RPI_GPIO_FSEL0_07_OUTPUT    ( 1 << 21 )
-
-#define RPI_GPIO_FSEL0_08_INPUT     ( 0 << 24 )
-#define RPI_GPIO_FSEL0_08_OUTPUT    ( 1 << 24 )
-
-#define RPI_GPIO_FSEL0_09_INPUT     ( 0 << 27 )
-#define RPI_GPIO_FSEL0_09_OUTPUT    ( 1 << 27 )
-
-
-
+#define LED_GPSET           GPSET0
+#define LED_GPCLR           GPCLR0
+#define LED_ON()        do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
 
 /** The GPIO Peripheral is described in section 6 of the BCM2835 Peripherals
     documentation.
