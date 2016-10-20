@@ -57,6 +57,21 @@ void led_on( gpio_bit )
     do { RPI_GetGpio()->LED_GPSET = ( 1 <<  gpio_bit ); } while( 0 );
 }
 
+unsigned int run_modo( const ciclo_t secAct[] )
+{
+    unsigned int i = 0;
+    unsigned int safe = 1;
+
+	while(safe){
+		aux = 11111111 && secAct[i].estados;
+		if(aux == 00001001 || aux == 00001010 || aux == 00010001 || aux == 00000000){
+            safe = 0;
+		}else
+			i++;
+	}
+    return safe;
+}
+
 /** Main function - we'll never return from here */
 void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 {
@@ -69,13 +84,12 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
     RPI_GetGpio()->LED_GPFSEL2 = 0;
 
     /* establecer las salidas */
-    /* todos son outputs menos el swtich */
-    set_output(LED_GPFSEL1, LED_GPFBIT_C1R);
-    set_output(LED_GPFSEL1, LED_GPFBIT_C1A);
-    set_output(LED_GPFSEL2, LED_GPFBIT_C1V);
-    set_output(LED_GPFSEL0, LED_GPFBIT_C2R);
-    set_output(LED_GPFSEL2, LED_GPFBIT_C2A);
-    set_output(LED_GPFSEL1, LED_GPFBIT_C2V);
+    set_output( LED_GPFSEL1, LED_GPFBIT_C1R );
+    set_output( LED_GPFSEL1, LED_GPFBIT_C1A );
+    set_output( LED_GPFSEL2, LED_GPFBIT_C1V );
+    set_output( LED_GPFSEL0, LED_GPFBIT_C2R );
+    set_output( LED_GPFSEL2, LED_GPFBIT_C2A );
+    set_output( LED_GPFSEL1, LED_GPFBIT_C2V );
 
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
@@ -93,28 +107,22 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 
     */
 
-//Duda1: Es necesario hacer un loop grande para q pase por los tres modos?
-//Duda2: Por que "seteamos el tiempo con RPI_GetArmTimer()->Load y llamamos a las funciones para prender y apagar los correspondientes leds"?
-//Duda3: Que parte de la RPI selecciona el modo?
-//Duda4: Definir secAct, i, N y modos
-//Duda5: Por cuanto tiempo esta el modo de emergencia activo?
+/*   
+	Pseudocodigo 
+	loop
+	pulso el sw
+		entro al modo n
+		if (!run_modo(modo_n[]))
+			modo de emergencia hasta q pulse el sw
 
+            
 	RPI_algo()->Modo = modo_0; 			//Esto tiene q ser al azar entre 0 y 2
-	
-	while(i<N){ 						//Donde N es la cantidad de secuencias de un modo 
-		aux = 11111111 && secAct[i]; 	//secAct es la secuencia q se esta ejecutando en este momento
-		if(aux == 00001001 || aux == 00001010 || aux == 00010001 || aux == 00000000){		//La secuencia es permitida?
-			RPI_algo()->Modo = modo_3; 	//modo_3  = modo de emergencia
-			i = N;					//Salgo del loop
-		}else
-			i++;						//Avanzo la secuencia
-	}
 
-	led_on( LED_GPIO_BIT_SW );		//Pulso el switch
+	led_on( SW_GPIO_BITS );		//Pulso el switch
 	RPI_algo->Modo = modo_1			//Paso al siguiente modo, no necesariamente modo_1
-	led_off( LED_GPIO_BIT_SW );		//Suelto de switch
+	led_off( SW_GPIO_BITS );		//Suelto de switch
 
-
+*/
     /* Setup the system timer interrupt */
     /* Timer frequency = Clk/256 * 0x400 */
     RPI_GetArmTimer()->Load = 1000000;//0x400;
