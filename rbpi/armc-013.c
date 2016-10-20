@@ -40,6 +40,22 @@
 #include "rpi-armtimer.h"
 #include "rpi-systimer.h"
 #include "rpi-interrupts.h"
+#include "sem.h"
+
+void set_output( gpfsel, gpfbit )
+{
+    RPI_GetGpio()->gpfsel |= (1 << gpfbit);
+}
+
+void led_off( gpio_bit )
+{
+    do { RPI_GetGpio()->LED_GPCLR = ( 1 <<  gpio_bit ); } while( 0 );
+}
+
+void led_on( gpio_bit )
+{
+    do { RPI_GetGpio()->LED_GPSET = ( 1 <<  gpio_bit ); } while( 0 );
+}
 
 /** Main function - we'll never return from here */
 void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
@@ -53,12 +69,31 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
     RPI_GetGpio()->LED_GPFSEL2 = 0;
 
     /* establecer las salidas */
-    RPI_GetGpio()->LED_GPFSEL |= (1<<LED_GPFBIT);
-//     RPI_GetGpio()->LED_GPFSEL = 0;
-// RPI_GetGpio()->LED_GPFSEL |= 1<<LED_GPFBIT;
+    /* todos son outputs menos el swtich */
+    RPI_GetGpio()->LED_GPFSEL0 |= (1 << LED_GPFBIT_C2R);
+
+    RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C1R);
+    RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C1A);
+    RPI_GetGpio()->LED_GPFSEL1 |= (1 << LED_GPFBIT_C2V);
+
+    RPI_GetGpio()->LED_GPFSEL2 |= (1 << LED_GPFBIT_C1V);
+    RPI_GetGpio()->LED_GPFSEL2 |= (1 << LED_GPFBIT_C2A);
 
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
+
+    /* 
+
+        Despues de esto debemos apuntar a un modo (1 de los 3),
+        iterar en las secuencias.
+        Por cada secuencia, hacemos una mascara de los bits para saber
+        cual led esta prendido o apagado.
+        Si los leds corresponden a una secuencia no permitida
+        entonces apuntar al modo de emergencia. Si no, seteamos el tiempo con RPI_GetArmTimer()->Load y
+        llamamos a las funciones para prender y apagar los correspondientes leds.
+        Verificamos el estado del switch (si esta encendido, apuntamos al siguiente modo)
+
+    */
 
     /* Setup the system timer interrupt */
     /* Timer frequency = Clk/256 * 0x400 */
