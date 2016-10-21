@@ -29,7 +29,7 @@ const ciclo_t mode_2[LENGTH_ARR] = {
     0b000000, 0;
 };
 
-const ciclo_t emergency_mode[1] = {
+const ciclo_t emergency_mode[2] = {
 	0b010010, 20000000;
     0b000000, 20000000;
 };

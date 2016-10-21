@@ -57,11 +57,16 @@ void led_on( gpio_bit )
     do { RPI_GetGpio()->LED_GPSET = ( 1 <<  gpio_bit ); } while( 0 );
 }
 
-void exec_sec()
+void exec_seq()
 {
 
     /* aca irian las mascaras y las llamadas a led_on y led_off */
     RPI_GetArmTimer()->Load = sec.time;
+}
+
+unsigned int sw_activated()
+{
+    
 }
 
 unsigned int sw_stat() //Aca toma la señal del sw
@@ -121,25 +126,25 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
     /* Never exit as there is no OS to exit to! */
     while(1)
     {
-        ciclo_t sec = modes[i][j];
+        ciclo_t seq = modes[i][j];
         /* check if switch is activated */
         if(i != 3 && sw_activated()) {
             i++;
             j = 0;
         } else {
-            /* check if secuency is valid */
-            aux = 11111111 && sec.state;
+            /* check if sequence is valid */
+            aux = 11111111 && seq.state;
             if(aux == 00001001 || aux == 00010001 || aux == 00001010 || aux == 00000000) {
                 /* activate emergency_mode */
                 i = 3;
                 j = 0;
             } else {
                 /* if time = 0, reset the loop */
-                if(sec.time == 0)
+                if(seq.time == 0)
                     j = 0;
                 else {
-                    /* execute secuency */
-                    exec_sec(sec);
+                    /* execute sequence */
+                    exec_seq(seq);
                     j++;
                 }
             }
