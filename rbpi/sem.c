@@ -1,9 +1,5 @@
-stdint.h
-
-typedef ciclo_t{
-    uint8_t estados;
-    uint8_t tiempo_ns;
-};
+#include<stdint.h>
+#include<sem.h>
 
 const ciclo_t modo_0[6] = {
     /* FIJARSE COMO ESTA DECLARADO EL TIEMPO EN RPI_GetArmTimer()-> Load */
