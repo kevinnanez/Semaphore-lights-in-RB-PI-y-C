@@ -29,9 +29,10 @@ const ciclo_t mode_2[LENGTH_ARR] = {
     0b000000, 0;
 };
 
-const ciclo_t emergency_mode[2] = {
+const ciclo_t emergency_mode[3] = {
 	0b010010, 20000000;
     0b000000, 20000000;
+    0b000000, 0;
 };
 
 ciclo_t* modes[] = {mode_0, mode_1, mode_2, emergency_mode};
