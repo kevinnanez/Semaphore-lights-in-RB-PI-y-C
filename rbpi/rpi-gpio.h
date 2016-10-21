@@ -36,7 +36,7 @@
 /** The base address of the GPIO peripheral (ARM Physical Address) */
 #define RPI_GPIO_BASE       ( PERIPHERAL_BASE + 0x200000UL )
 
-/* 
+/*
     GPFSEL0: C2-R
     GPFSEL1: C1-R   C1-A    C2-V    SW
     GPFSEL2: C1-V   C2-A
@@ -75,8 +75,8 @@
 #define LED_GPIO_BIT_C2V    18
 
 /* switch */
-#define LED_GPFBIT_SW      12
-#define LED_GPIO_BIT_SW    14
+#define GPFBIT_SW      12
+#define GPIO_BIT_SW    14
 
 /** The GPIO Peripheral is described in section 6 of the BCM2835 Peripherals
     documentation.

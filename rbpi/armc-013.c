@@ -80,7 +80,7 @@ unsigned int run_modo( const ciclo_t secAct[] )
 unsigned int sw_stat() //Aca toma la señal del sw
 {
     unsigned int sw = 0;
-    if (LED_GPIO_BIT_SW && 11111111)
+    if (GPIO_BIT_SW && 11111111)
         sw = 1;
     return sw;
 }
@@ -106,9 +106,7 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
-
-
-    /* 
+    /*
         Despues de esto debemos apuntar a un modo (1 de los 3),
         iterar en las secuencias.
         Por cada secuencia, hacemos una mascara de los bits para saber
@@ -119,7 +117,7 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
         Verificamos el estado del switch (si esta encendido, apuntamos al siguiente modo)
 
     */
-  
+
 	RPI_algo()->Modo = modo_0; //entro al modo_0 predeterminado. Siempre que se pulse el sw continuo con la linea siguiente
         if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
     RPI_algo()->Modo = modo_1;
