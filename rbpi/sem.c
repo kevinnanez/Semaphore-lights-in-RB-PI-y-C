@@ -34,3 +34,4 @@ const ciclo_t emergency_mode[1] = {
     0b000000, 20000000;
 };
 
+ciclo_t* modes[] = {mode_0, mode_1, mode_2, emergency_mode};

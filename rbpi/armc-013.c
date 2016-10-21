@@ -57,24 +57,11 @@ void led_on( gpio_bit )
     do { RPI_GetGpio()->LED_GPSET = ( 1 <<  gpio_bit ); } while( 0 );
 }
 
-unsigned int run_modo( const ciclo_t secAct[] )
+void exec_sec()
 {
-    unsigned int i = 0;
-    unsigned int safe = 1;
-    unsigned int sw = 1;
 
-	while(safe){
-		aux = 11111111 && secAct[i].estados;
-		if(aux == 00001001 || aux == 00001010 || aux == 00010001 || aux == 00000000)
-            safe = 0;
-        else if(sw_stat()){
-            safe = 0;
-            sw = 0;
-		}else
-			i++;
-	}
-    safe = (sw == safe); //safe es igual a 1 cuando el sw esta pulsado y 0 cuando es emergencia
-    return safe;
+    /* aca irian las mascaras y las llamadas a led_on y led_off */
+    RPI_GetArmTimer()->Load = sec.time;
 }
 
 unsigned int sw_stat() //Aca toma la señal del sw
@@ -106,6 +93,17 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
+
+    /* Setup the ARM Timer */
+    RPI_GetArmTimer()->Control =
+            RPI_ARMTIMER_CTRL_23BIT |
+            RPI_ARMTIMER_CTRL_ENABLE |
+            RPI_ARMTIMER_CTRL_INT_ENABLE |
+            RPI_ARMTIMER_CTRL_PRESCALE_1;
+
+    /* Enable interrupts! */
+    _enable_interrupts();
+
     /*
         Despues de esto debemos apuntar a un modo (1 de los 3),
         iterar en las secuencias.
@@ -118,32 +116,33 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 
     */
 
-    
-
-	RPI_algo()->Modo = modo_0; //entro al modo_0 predeterminado. Siempre que se pulse el sw continuo con la linea siguiente
-        if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
-    RPI_algo()->Modo = modo_1;
-        if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
-    RPI_algo()->Modo = modo_2;
-        if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
-
-    /* Setup the system timer interrupt */
-    /* Timer frequency = Clk/256 * 0x400 */
-    RPI_GetArmTimer()->Load = 1000000;//0x400;
-
-    /* Setup the ARM Timer */
-    RPI_GetArmTimer()->Control =
-            RPI_ARMTIMER_CTRL_23BIT |
-            RPI_ARMTIMER_CTRL_ENABLE |
-            RPI_ARMTIMER_CTRL_INT_ENABLE |
-            RPI_ARMTIMER_CTRL_PRESCALE_1;
-
-    /* Enable interrupts! */
-    _enable_interrupts();
+    unsigned int i = 0, j = 0;
 
     /* Never exit as there is no OS to exit to! */
     while(1)
     {
-
+        ciclo_t sec = modes[i][j];
+        /* check if switch is activated */
+        if(i != 3 && sw_activated()) {
+            i++;
+            j = 0;
+        } else {
+            /* check if secuency is valid */
+            aux = 11111111 && sec.state;
+            if(aux == 00001001 || aux == 00010001 || aux == 00001010 || aux == 00000000) {
+                /* activate emergency_mode */
+                i = 3;
+                j = 0;
+            } else {
+                /* if time = 0, reset the loop */
+                if(sec.time == 0)
+                    j = 0;
+                else {
+                    /* execute secuency */
+                    exec_sec(sec);
+                    j++;
+                }
+            }
+        }
     }
 }
