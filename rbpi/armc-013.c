@@ -61,15 +61,28 @@ unsigned int run_modo( const ciclo_t secAct[] )
 {
     unsigned int i = 0;
     unsigned int safe = 1;
+    unsigned int sw = 1;
 
 	while(safe){
 		aux = 11111111 && secAct[i].estados;
-		if(aux == 00001001 || aux == 00001010 || aux == 00010001 || aux == 00000000){
+		if(aux == 00001001 || aux == 00001010 || aux == 00010001 || aux == 00000000)
             safe = 0;
+        else if(sw_stat()){
+            safe = 0;
+            sw = 0;
 		}else
 			i++;
 	}
+    safe = (sw == safe); //safe es igual a 1 cuando el sw esta pulsado y 0 cuando es emergencia
     return safe;
+}
+
+unsigned int sw_stat() //Aca toma la señal del sw
+{
+    unsigned int sw = 0;
+    if (LED_GPIO_BIT_SW && 11111111)
+        sw = 1;
+    return sw;
 }
 
 /** Main function - we'll never return from here */
@@ -106,23 +119,20 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
         Verificamos el estado del switch (si esta encendido, apuntamos al siguiente modo)
 
     */
+  
+	RPI_algo()->Modo = modo_0; //entro al modo_0 predeterminado. Siempre que se pulse el sw continuo con la linea siguiente
+        if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
+    RPI_algo()->Modo = modo_1;
+        if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
+    RPI_algo()->Modo = modo_2;
+        if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
 
-/*   
-	Pseudocodigo 
-	loop
-	pulso el sw
-		entro al modo n
-		if (!run_modo(modo_n[]))
-			modo de emergencia hasta q pulse el sw
 
-            
-	RPI_algo()->Modo = modo_0; 			//Esto tiene q ser al azar entre 0 y 2
 
-	led_on( SW_GPIO_BITS );		//Pulso el switch
-	RPI_algo->Modo = modo_1			//Paso al siguiente modo, no necesariamente modo_1
-	led_off( SW_GPIO_BITS );		//Suelto de switch
+//	led_on( LED_GPIO_BIT_SW );		//Pulso el switch
+//	led_off( LED_GPIO_BIT_SW );		//Suelto de switch
 
-*/
+
     /* Setup the system timer interrupt */
     /* Timer frequency = Clk/256 * 0x400 */
     RPI_GetArmTimer()->Load = 1000000;//0x400;
