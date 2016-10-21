@@ -118,18 +118,14 @@ void kernel_main( unsigned int r0, unsigned int r1, unsigned int atags )
 
     */
 
+    
+
 	RPI_algo()->Modo = modo_0; //entro al modo_0 predeterminado. Siempre que se pulse el sw continuo con la linea siguiente
         if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
     RPI_algo()->Modo = modo_1;
         if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
     RPI_algo()->Modo = modo_2;
         if (!run_modo(modo_0[])) while(!sw_stat()) RPI_algo()->Modo = modo_3;
-
-
-
-//	led_on( LED_GPIO_BIT_SW );		//Pulso el switch
-//	led_off( LED_GPIO_BIT_SW );		//Suelto de switch
-
 
     /* Setup the system timer interrupt */
     /* Timer frequency = Clk/256 * 0x400 */

@@ -2,5 +2,5 @@
 
 typedef ciclo_t{
     uint8_t estados;
-    uint8_t tiempo_ns;
+    uint32_t tiempo_ns;
 };
