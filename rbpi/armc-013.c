@@ -66,7 +66,7 @@ void exec_seq()
 
 unsigned int sw_activated()
 {
-    
+    return 1;
 }
 
 unsigned int sw_stat() //Aca toma la señal del sw
